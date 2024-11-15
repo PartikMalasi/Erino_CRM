@@ -1,7 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 
-const registerUser = asyncHandler(async (req, res) => {
+const registerContact = asyncHandler(async (req, res) => {
   res.status(200).send("Register User");
 });
 
-export { registerUser };
+export { registerContact };

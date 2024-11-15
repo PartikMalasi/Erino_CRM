@@ -3,10 +3,7 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["DM Sans", "sans-serif"],
-        museo: ["Museo", "sans-serif"],
-      },
+      fontFamily: {},
     },
   },
   plugins: [
