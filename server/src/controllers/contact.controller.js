@@ -36,10 +36,27 @@ const registerContact = asyncHandler(async (req, res) => {
 
 // Get all contacts
 const getAllContacts = asyncHandler(async (req, res) => {
-  const contacts = await Contact.find(); // Fetch all contacts
-  res
-    .status(200)
-    .json(new ApiResponse(200, "Contacts fetched successfully", contacts));
+  const { page = 1, limit = 5 } = req.query;
+  const pageNumber = parseInt(page, 10);
+  const pageLimit = parseInt(limit, 10);
+
+  if (pageNumber < 1 || pageLimit < 1) {
+    throw new ApiError(400, "Page and limit must be positive integers");
+  }
+
+  const contacts = await Contact.find()
+    .skip((pageNumber - 1) * pageLimit)
+    .limit(pageLimit);
+  const totalContacts = await Contact.countDocuments();
+
+  res.status(200).json(
+    new ApiResponse(200, "Contacts retrieved successfully", {
+      contacts,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalContacts / pageLimit),
+      totalContacts,
+    })
+  );
 });
 
 // Update a specific contact
@@ -47,7 +64,6 @@ const updateContact = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
 
-  // Find and update the contact
   const updatedContact = await Contact.findByIdAndUpdate(id, updates, {
     new: true,
   });
@@ -65,7 +81,6 @@ const updateContact = asyncHandler(async (req, res) => {
 const deleteContact = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  // Find and delete the contact
   const deletedContact = await Contact.findByIdAndDelete(id);
 
   if (!deletedContact) {

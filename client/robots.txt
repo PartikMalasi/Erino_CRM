@@ -1,8 +1,0 @@
-User-agent: *
-# Allow all search engines to access the main page
-Allow: /
-# Block crawling of the About Us and Farmer pages if they are less important
-Disallow: /aboutus
-Disallow: /farmer
-# Block admin sections or specific directories if needed (optional)
-# Disallow: /admin
