@@ -64,6 +64,14 @@ const updateContact = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
 
+  // Check if the email is being updated and if the email already exists in the database
+  if (updates.email) {
+    const existingEmail = await Contact.findOne({ email: updates.email });
+    if (existingEmail && existingEmail._id.toString() !== id) {
+      throw new ApiError(400, "Email already exists");
+    }
+  }
+
   const updatedContact = await Contact.findByIdAndUpdate(id, updates, {
     new: true,
   });

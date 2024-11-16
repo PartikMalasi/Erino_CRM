@@ -136,7 +136,9 @@ const Home = () => {
         // Show Zod validation errors
         error.errors.forEach((e) => toast.error(e.message));
       } else {
-        toast.error("Failed to update contact.");
+        console.log(error);
+
+        toast.error(error.response.data.message);
       }
     }
   };
